@@ -49,88 +49,75 @@ document.addEventListener('DOMContentLoaded', function() {
 /**
  * Mobile Menu Functionality
  */
+/**
+ * Mobile Menu Functionality
+ */
 function initMobileMenu() {
-    console.log('Initializing mobile menu...');
-    
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    
-    console.log('Mobile menu button:', mobileMenuButton);
-    console.log('Mobile menu:', mobileMenu);
-    
-    if (!mobileMenuButton || !mobileMenu) {
-        console.error('Mobile menu elements not found!');
+    console.log('Initializing mobile menus...');
+
+    // Get all buttons and menus (IDs might be duplicated across pages, so use querySelectorAll)
+    const buttons = document.querySelectorAll('#mobile-menu-button');
+    const menus = document.querySelectorAll('#mobile-menu');
+
+    if (!buttons.length || !menus.length) {
+        console.warn('No mobile menu buttons/menus found on this page.');
         return;
     }
-    
-    console.log('Mobile menu elements found, adding event listeners...');
-    
-    // Simple toggle function
-    function toggleMenu() {
-        console.log('Toggle menu called');
-        const isHidden = mobileMenu.classList.contains('hidden');
-        console.log('Current menu state - hidden:', isHidden);
-        
-        if (isHidden) {
-            mobileMenu.classList.remove('hidden');
-            updateIcon(false); // Show X icon
-            console.log('Menu opened');
-        } else {
-            mobileMenu.classList.add('hidden');
-            updateIcon(true); // Show hamburger icon
-            console.log('Menu closed');
-        }
-    }
-    
-    // Update icon function
-    function updateIcon(showHamburger) {
-        const svgPath = mobileMenuButton.querySelector('svg path');
-        if (svgPath) {
-            if (showHamburger) {
-                svgPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
-                console.log('Icon set to hamburger');
+
+    buttons.forEach((button, index) => {
+        const menu = menus[index] || menus[0]; // match button to menu (fallback to first)
+
+        // Simple toggle function
+        function toggleMenu() {
+            const isHidden = menu.classList.contains('hidden');
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                updateIcon(false); // switch to "X"
             } else {
-                svgPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
-                console.log('Icon set to X');
+                menu.classList.add('hidden');
+                updateIcon(true); // switch back to hamburger
             }
-        } else {
-            console.error('SVG path not found');
         }
-    }
-    
-    // Add click event to button
-    mobileMenuButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('Mobile menu button clicked');
-        toggleMenu();
-    });
-    
-    // Add click events to menu links
-    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
-    console.log('Found', mobileMenuLinks.length, 'mobile menu links');
-    
-    mobileMenuLinks.forEach((link, index) => {
-        link.addEventListener('click', function() {
-            console.log('Mobile menu link', index, 'clicked');
-            mobileMenu.classList.add('hidden');
-            updateIcon(true);
+
+        // Update icon path
+        function updateIcon(showHamburger) {
+            const svgPath = button.querySelector('svg path');
+            if (svgPath) {
+                svgPath.setAttribute(
+                    'd',
+                    showHamburger
+                        ? 'M4 6h16M4 12h16M4 18h16' // hamburger
+                        : 'M6 18L18 6M6 6l12 12'    // X
+                );
+            }
+        }
+
+        // Button click
+        button.addEventListener('click', e => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMenu();
+        });
+
+        // Close menu on link click
+        const menuLinks = menu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+                updateIcon(true);
+            });
+        });
+
+        // Close menu on outside click
+        document.addEventListener('click', event => {
+            if (!menu.contains(event.target) && !button.contains(event.target) && !menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+                updateIcon(true);
+            }
         });
     });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const isClickInsideMenu = mobileMenu.contains(event.target);
-        const isClickOnButton = mobileMenuButton.contains(event.target);
-        
-        if (!isClickInsideMenu && !isClickOnButton && !mobileMenu.classList.contains('hidden')) {
-            console.log('Clicking outside menu, closing');
-            mobileMenu.classList.add('hidden');
-            updateIcon(true);
-        }
-    });
-    
-    console.log('Mobile menu initialization complete');
+
+    console.log('Mobile menu initialization complete for', buttons.length, 'menus.');
 }
 
 /**
