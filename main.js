@@ -14,6 +14,7 @@
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing Sterling & Associates functionality...');
     
     // Initialize all functionality
     initMobileMenu();
@@ -23,29 +24,50 @@ document.addEventListener('DOMContentLoaded', function() {
     initAnimations();
     initLoadingEffects();
     
+    console.log('All functionality initialized');
 });
 
 /**
  * Mobile Menu Functionality
  */
 function initMobileMenu() {
+    console.log('Initializing mobile menu...');
+    
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     
-    if (!mobileMenuButton || !mobileMenu) return;
+    console.log('Mobile menu button:', mobileMenuButton);
+    console.log('Mobile menu:', mobileMenu);
+    
+    if (!mobileMenuButton || !mobileMenu) {
+        console.error('Mobile menu elements not found!');
+        return;
+    }
+    
+    console.log('Mobile menu elements found, adding event listeners...');
     
     // Toggle mobile menu
-    mobileMenuButton.addEventListener('click', function() {
+    mobileMenuButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('Mobile menu button clicked');
+        
         mobileMenu.classList.toggle('hidden');
+        console.log('Menu hidden class toggled. Hidden:', mobileMenu.classList.contains('hidden'));
         
         // Toggle hamburger icon to X icon
-        const svg = mobileMenuButton.querySelector('svg path');
-        if (mobileMenu.classList.contains('hidden')) {
-            // Show hamburger icon
-            svg.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
-        } else {
-            // Show X icon
-            svg.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+        const svgPath = mobileMenuButton.querySelector('svg path');
+        console.log('SVG path found:', svgPath);
+        
+        if (svgPath) {
+            if (mobileMenu.classList.contains('hidden')) {
+                // Show hamburger icon
+                svgPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+                console.log('Set to hamburger icon');
+            } else {
+                // Show X icon
+                svgPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+                console.log('Set to X icon');
+            }
         }
         
         // Add animation class
@@ -54,24 +76,34 @@ function initMobileMenu() {
     
     // Close mobile menu when clicking on links
     const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+    console.log('Found', mobileMenuLinks.length, 'mobile menu links');
+    
     mobileMenuLinks.forEach(link => {
         link.addEventListener('click', function() {
+            console.log('Mobile menu link clicked');
             mobileMenu.classList.add('hidden');
-            const svg = mobileMenuButton.querySelector('svg path');
-            svg.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+            const svgPath = mobileMenuButton.querySelector('svg path');
+            if (svgPath) {
+                svgPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+            }
         });
     });
     
     // Close mobile menu when clicking outside
     document.addEventListener('click', function(event) {
         if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
-            mobileMenu.classList.add('hidden');
-            const svg = mobileMenuButton.querySelector('svg path');
-            if (svg) {
-                svg.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+            if (!mobileMenu.classList.contains('hidden')) {
+                console.log('Clicking outside, closing menu');
+                mobileMenu.classList.add('hidden');
+                const svgPath = mobileMenuButton.querySelector('svg path');
+                if (svgPath) {
+                    svgPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+                }
             }
         }
     });
+    
+    console.log('Mobile menu initialization complete');
 }
 
 /**
