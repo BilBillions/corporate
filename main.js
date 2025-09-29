@@ -16,6 +16,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing Sterling & Associates functionality...');
     
+    // Test if elements exist
+    const mobileButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    console.log('Quick test - Button exists:', !!mobileButton, 'Menu exists:', !!mobileMenu);
+    
     // Initialize all functionality
     initMobileMenu();
     initScrollEffects();
@@ -25,6 +30,20 @@ document.addEventListener('DOMContentLoaded', function() {
     initLoadingEffects();
     
     console.log('All functionality initialized');
+    
+    // Add a simple test function to window for manual testing
+    window.testMobileMenu = function() {
+        const button = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        console.log('Test function called');
+        console.log('Button:', button);
+        console.log('Menu:', menu);
+        if (button && menu) {
+            menu.classList.toggle('hidden');
+            console.log('Menu toggled. Hidden:', menu.classList.contains('hidden'));
+        }
+    };
+    console.log('Test function added to window.testMobileMenu()');
 });
 
 /**
@@ -46,60 +65,68 @@ function initMobileMenu() {
     
     console.log('Mobile menu elements found, adding event listeners...');
     
-    // Toggle mobile menu
+    // Simple toggle function
+    function toggleMenu() {
+        console.log('Toggle menu called');
+        const isHidden = mobileMenu.classList.contains('hidden');
+        console.log('Current menu state - hidden:', isHidden);
+        
+        if (isHidden) {
+            mobileMenu.classList.remove('hidden');
+            updateIcon(false); // Show X icon
+            console.log('Menu opened');
+        } else {
+            mobileMenu.classList.add('hidden');
+            updateIcon(true); // Show hamburger icon
+            console.log('Menu closed');
+        }
+    }
+    
+    // Update icon function
+    function updateIcon(showHamburger) {
+        const svgPath = mobileMenuButton.querySelector('svg path');
+        if (svgPath) {
+            if (showHamburger) {
+                svgPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+                console.log('Icon set to hamburger');
+            } else {
+                svgPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+                console.log('Icon set to X');
+            }
+        } else {
+            console.error('SVG path not found');
+        }
+    }
+    
+    // Add click event to button
     mobileMenuButton.addEventListener('click', function(e) {
         e.preventDefault();
+        e.stopPropagation();
         console.log('Mobile menu button clicked');
-        
-        mobileMenu.classList.toggle('hidden');
-        console.log('Menu hidden class toggled. Hidden:', mobileMenu.classList.contains('hidden'));
-        
-        // Toggle hamburger icon to X icon
-        const svgPath = mobileMenuButton.querySelector('svg path');
-        console.log('SVG path found:', svgPath);
-        
-        if (svgPath) {
-            if (mobileMenu.classList.contains('hidden')) {
-                // Show hamburger icon
-                svgPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
-                console.log('Set to hamburger icon');
-            } else {
-                // Show X icon
-                svgPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
-                console.log('Set to X icon');
-            }
-        }
-        
-        // Add animation class
-        mobileMenu.classList.add('transition-all', 'duration-300');
+        toggleMenu();
     });
     
-    // Close mobile menu when clicking on links
+    // Add click events to menu links
     const mobileMenuLinks = mobileMenu.querySelectorAll('a');
     console.log('Found', mobileMenuLinks.length, 'mobile menu links');
     
-    mobileMenuLinks.forEach(link => {
+    mobileMenuLinks.forEach((link, index) => {
         link.addEventListener('click', function() {
-            console.log('Mobile menu link clicked');
+            console.log('Mobile menu link', index, 'clicked');
             mobileMenu.classList.add('hidden');
-            const svgPath = mobileMenuButton.querySelector('svg path');
-            if (svgPath) {
-                svgPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
-            }
+            updateIcon(true);
         });
     });
     
-    // Close mobile menu when clicking outside
+    // Close menu when clicking outside
     document.addEventListener('click', function(event) {
-        if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
-            if (!mobileMenu.classList.contains('hidden')) {
-                console.log('Clicking outside, closing menu');
-                mobileMenu.classList.add('hidden');
-                const svgPath = mobileMenuButton.querySelector('svg path');
-                if (svgPath) {
-                    svgPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
-                }
-            }
+        const isClickInsideMenu = mobileMenu.contains(event.target);
+        const isClickOnButton = mobileMenuButton.contains(event.target);
+        
+        if (!isClickInsideMenu && !isClickOnButton && !mobileMenu.classList.contains('hidden')) {
+            console.log('Clicking outside menu, closing');
+            mobileMenu.classList.add('hidden');
+            updateIcon(true);
         }
     });
     
