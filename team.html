@@ -27,32 +27,41 @@
 <body class="bg-white text-gray-900 font-sans antialiased">
 
   <!-- Header -->
-  <header class="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-brand-navy rounded-lg flex items-center justify-center">
-          <span class="text-white font-bold text-lg">S&A</span>
-        </div>
-        <h1 class="text-xl font-bold text-brand-dark">Sterling & Associates</h1>
+ <header class="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+  <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <!-- Logo -->
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 bg-brand-navy rounded-lg flex items-center justify-center">
+        <span class="text-white font-bold text-lg">S&A</span>
       </div>
-      <nav class="space-x-8 hidden md:flex">
-        <a href="index.html" class="text-gray-700 hover:text-brand-navy font-medium transition-colors">Home</a>
-        <a href="about.html" class="text-gray-700 hover:text-brand-navy font-medium transition-colors">About</a>
-        <a href="practice-areas.html" class="text-gray-700 hover:text-brand-navy font-medium transition-colors">Practice Areas</a>
-        <a href="#team" class="text-brand-navy hover:text-brand-navy font-medium transition-colors">James Sterling</a>
-        <a href="contact.html" class="bg-brand-navy text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors font-medium">Contact Us</a>
-      </nav>
+      <h1 class="text-xl font-bold text-brand-dark">Sterling & Associates</h1>
     </div>
-    <!-- Mobile Menu -->
-   <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 transition-all duration-300">
-      <nav class="container mx-auto px-6 py-4 space-y-3">
-        <a href="about.html" class="block text-gray-700 hover:text-brand-navy font-medium transition-colors py-2">About</a>
-        <a href="practice-areas.html" class="block text-gray-700 hover:text-brand-navy font-medium transition-colors py-2">Practice Areas</a>
-        <a href="team.html" class="block text-gray-700 hover:text-brand-navy font-medium transition-colors py-2">James Sterling</a>
-        <a href="contact.html" class="block bg-brand-navy text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors font-medium text-center mt-4">Contact Us</a>
-      </nav>
-    </div>
-  </header>
+
+    <!-- Desktop Nav -->
+    <nav class="space-x-8 hidden md:flex">
+      <a href="about.html" class="text-gray-700 hover:text-brand-navy font-medium transition-colors">About</a>
+      <a href="practice-areas.html" class="text-gray-700 hover:text-brand-navy font-medium transition-colors">Practice Areas</a>
+      <a href="team.html" class="text-gray-700 hover:text-brand-navy font-medium transition-colors">James Sterling</a>
+      <a href="contact.html" class="bg-brand-navy text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors font-medium">Contact Us</a>
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-button" class="md:hidden">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Nav (hidden by default) -->
+  <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-4 bg-white shadow-md">
+    <a href="about.html" class="block text-gray-700 hover:text-brand-navy font-medium">About</a>
+    <a href="practice-areas.html" class="block text-gray-700 hover:text-brand-navy font-medium">Practice Areas</a>
+    <a href="team.html" class="block text-gray-700 hover:text-brand-navy font-medium">James Sterling</a>
+    <a href="contact.html" class="block bg-brand-navy text-white px-4 py-2 rounded-lg hover:bg-blue-800 font-medium">Contact Us</a>
+  </div>
+</header>
 
   <section id="team" class="py-32 bg-white">
     <div class="container mx-auto px-6">
